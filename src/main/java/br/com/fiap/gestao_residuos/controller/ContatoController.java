@@ -31,11 +31,13 @@ public class ContatoController {
     }
 
     @GetMapping("/contato/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ContatoExibicaoDTO buscarContatoPorId(@PathVariable Long id){
         return contatoService.buscarContatoPorId(id);
     }
 
     @GetMapping("/contato/email/{email}")
+    @ResponseStatus(HttpStatus.OK)
     public ContatoExibicaoDTO buscarContatoPorEmail(@PathVariable String email){
         return contatoService.buscarContatoPorEmail(email);
     }
@@ -51,5 +53,4 @@ public class ContatoController {
     public void excluir(@PathVariable Long contatoId){
         contatoService.excluir(contatoId);
     }
-
 }

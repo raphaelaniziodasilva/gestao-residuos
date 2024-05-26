@@ -1,9 +1,8 @@
 package br.com.fiap.gestao_residuos.advice;
 
 
-import br.com.fiap.gestao_residuos.exception.ContatoExistenteException;
-import br.com.fiap.gestao_residuos.exception.ContatoNaoEncontradoException;
-import org.springframework.dao.DataIntegrityViolationException;
+import br.com.fiap.gestao_residuos.exception.ExistenteException;
+import br.com.fiap.gestao_residuos.exception.NaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,16 +32,16 @@ public class ApplicationExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(ContatoExistenteException.class)
-    public Map<String, String> handleContatoExistenteException(ContatoExistenteException ex) {
+    @ExceptionHandler(ExistenteException.class)
+    public Map<String, String> handleExistenteException(ExistenteException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error", ex.getMessage());
         return errorMap;
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ContatoNaoEncontradoException.class)
-    public Map<String, String> handleContatoNaoEncontradoException(ContatoNaoEncontradoException ex) {
+    @ExceptionHandler(NaoEncontradoException.class)
+    public Map<String, String> handleNaoEncontradoException(NaoEncontradoException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error", ex.getMessage());
         return errorMap;

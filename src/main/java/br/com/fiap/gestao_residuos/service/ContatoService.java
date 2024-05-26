@@ -2,8 +2,8 @@ package br.com.fiap.gestao_residuos.service;
 
 import br.com.fiap.gestao_residuos.dto.ContatoDTO;
 import br.com.fiap.gestao_residuos.dto.ContatoExibicaoDTO;
-import br.com.fiap.gestao_residuos.exception.ContatoExistenteException;
-import br.com.fiap.gestao_residuos.exception.ContatoNaoEncontradoException;
+import br.com.fiap.gestao_residuos.exception.ExistenteException;
+import br.com.fiap.gestao_residuos.exception.NaoEncontradoException;
 import br.com.fiap.gestao_residuos.model.Contato;
 import br.com.fiap.gestao_residuos.repository.ContatoRepository;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +22,7 @@ public class ContatoService {
         Optional<Contato> contatoExistente = contatoRepository.findByEmail(contatoDto.email());
 
         if (contatoExistente.isPresent()) {
-            throw new ContatoExistenteException("Contato já existe!");
+            throw new ExistenteException("Contato já existe!");
         }
 
         Contato novoContato = new Contato();
@@ -40,7 +40,7 @@ public class ContatoService {
         if (contatoOptional.isPresent()){
             return new ContatoExibicaoDTO(contatoOptional.get());
         } else {
-            throw new ContatoNaoEncontradoException("Contato não existe!");
+            throw new NaoEncontradoException("Contato não existe!");
         }
     }
 
@@ -50,7 +50,7 @@ public class ContatoService {
         if (contatoOptional.isPresent()) {
             return new ContatoExibicaoDTO(contatoOptional.get());
         } else {
-            throw new ContatoNaoEncontradoException("Contato não existe!");
+            throw new NaoEncontradoException("Contato não existe!");
         }
     }
 
@@ -62,7 +62,7 @@ public class ContatoService {
             BeanUtils.copyProperties(contato, contatoExistente, "id");
             return contatoRepository.save(contatoExistente);
         } else {
-            throw new ContatoNaoEncontradoException("Contato não encontrado!");
+            throw new NaoEncontradoException("Contato não encontrado!");
         }
     }
 
@@ -73,7 +73,7 @@ public class ContatoService {
         if (contatoOptional.isPresent()){
             contatoRepository.delete(contatoOptional.get());
         } else {
-            throw new ContatoNaoEncontradoException("Contato não encontrado!");
+            throw new NaoEncontradoException("Contato não encontrado!");
         }
     }
 }
