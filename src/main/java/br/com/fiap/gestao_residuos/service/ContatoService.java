@@ -15,29 +15,36 @@ import java.util.Optional;
 
 @Service
 public class ContatoService {
+    private final ContatoRepository contatoRepository;
+
     @Autowired
-    private ContatoRepository contatoRepository;
-
-    public ContatoExibicaoDTO salvarContato(ContatoDTO contatoDto){
-        Optional<Contato> contatoExistente = contatoRepository.findByEmail(contatoDto.email());
-
-        if (contatoExistente.isPresent()) {
-            throw new ExistenteException("Contato já existe!");
-        }
-
-        Contato novoContato = new Contato();
-        BeanUtils.copyProperties(contatoDto, novoContato);
-        return new ContatoExibicaoDTO(contatoRepository.save(novoContato));
+    public ContatoService(ContatoRepository contatoRepository) {
+        this.contatoRepository = contatoRepository;
     }
 
-    public List<Contato> listarContatos(){
+    public String salvarContato(ContatoDTO contatoDTO) throws ExistenteException {
+        if (contatoRepository.findByEmail(contatoDTO.email()).isPresent()) {
+            throw new ExistenteException("Contato já existe.");
+        }
+
+        Contato contato = new Contato();
+        contato.setNome(contatoDTO.nome());
+        contato.setEmail(contatoDTO.email());
+        contato.setTelefone(contatoDTO.telefone());
+        // Defina outros atributos se necessário
+
+        contatoRepository.save(contato);
+        return "Contato salvo com sucesso!";
+    }
+
+    public List<Contato> listarContatos() {
         return contatoRepository.findAll();
     }
 
-    public ContatoExibicaoDTO buscarContatoPorId(Long id){
+    public ContatoExibicaoDTO buscarContatoPorId(Long id) {
         Optional<Contato> contatoOptional = contatoRepository.findById(id);
 
-        if (contatoOptional.isPresent()){
+        if (contatoOptional.isPresent()) {
             return new ContatoExibicaoDTO(contatoOptional.get());
         } else {
             throw new NaoEncontradoException("Contato não existe!");
@@ -54,10 +61,10 @@ public class ContatoService {
         }
     }
 
-    public Contato atualizar(Long id, Contato contato){
+    public Contato atualizar(Long id, Contato contato) {
         Optional<Contato> contatoOptional = contatoRepository.findById(id);
 
-        if (contatoOptional.isPresent()){
+        if (contatoOptional.isPresent()) {
             Contato contatoExistente = contatoOptional.get();
             BeanUtils.copyProperties(contato, contatoExistente, "id");
             return contatoRepository.save(contatoExistente);
@@ -66,11 +73,10 @@ public class ContatoService {
         }
     }
 
-
-    public void excluir(Long id){
+    public void excluir(Long id) {
         Optional<Contato> contatoOptional = contatoRepository.findById(id);
 
-        if (contatoOptional.isPresent()){
+        if (contatoOptional.isPresent()) {
             contatoRepository.delete(contatoOptional.get());
         } else {
             throw new NaoEncontradoException("Contato não encontrado!");

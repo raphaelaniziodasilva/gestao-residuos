@@ -27,6 +27,10 @@ public class Lixo {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Double getCapacidade() {
         return capacidade;
     }

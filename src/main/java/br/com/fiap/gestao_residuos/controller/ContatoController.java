@@ -20,7 +20,7 @@ public class ContatoController {
 
     @PostMapping("/contato")
     @ResponseStatus(HttpStatus.CREATED)
-    public ContatoExibicaoDTO salvarContato(@RequestBody @Valid ContatoDTO contatoDto){
+    public String salvarContato(@RequestBody @Valid ContatoDTO contatoDto){
         return contatoService.salvarContato(contatoDto);
     }
 

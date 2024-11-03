@@ -20,7 +20,7 @@ public class LixoController {
 
     @PostMapping("/lixo")
     @ResponseStatus(HttpStatus.CREATED)
-    public LixoExibicaoDTO salvarLixo(@RequestBody @Valid LixoDTO lixoDTO) {
+    public String salvarLixo(@RequestBody @Valid LixoDTO lixoDTO) {
         return lixoService.salvarLixo(lixoDTO);
     }
 

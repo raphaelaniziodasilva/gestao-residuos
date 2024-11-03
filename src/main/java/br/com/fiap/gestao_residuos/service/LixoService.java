@@ -2,8 +2,10 @@ package br.com.fiap.gestao_residuos.service;
 
 import br.com.fiap.gestao_residuos.dto.LixoDTO;
 import br.com.fiap.gestao_residuos.dto.LixoExibicaoDTO;
+import br.com.fiap.gestao_residuos.exception.ExistenteException;
 import br.com.fiap.gestao_residuos.exception.NaoEncontradoException;
 import br.com.fiap.gestao_residuos.model.Lixo;
+import br.com.fiap.gestao_residuos.repository.ContatoRepository;
 import br.com.fiap.gestao_residuos.repository.LixoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,21 @@ import java.util.stream.Collectors;
 @Service
 public class LixoService {
     @Autowired
-    private LixoRepository lixoRepository;
+    private final LixoRepository lixoRepository;
 
-    public LixoExibicaoDTO salvarLixo(LixoDTO lixoDto) {
+    @Autowired
+    public LixoService(LixoRepository lixoRepository) {
+        this.lixoRepository = lixoRepository;
+    }
+
+    public String salvarLixo(LixoDTO lixoDto) {
+        if (!lixoRepository.findByLocalizacao(lixoDto.localizacao()).isEmpty()) {
+            throw new ExistenteException("Lixo já existe na mesma localização.");
+        }
+
         Lixo novoLixo = new Lixo();
         BeanUtils.copyProperties(lixoDto, novoLixo);
-        return new LixoExibicaoDTO(lixoRepository.save(novoLixo));
+        return "Lixo salvo com sucesso!";
     }
 
     public List<Lixo> listarLixos() {
